@@ -1,0 +1,160 @@
+﻿@using Models.EntityFramework;
+@model RequestInfo
+
+<form id="createOrEditRequestForm" method="post" asp-page="Index" asp-route-id="@Model.Id" asp-page-handler="CreateOrEditRequest" onsubmit="return PassFormWithArray(this);">
+    <div class="row g-3">
+        <div class="col-auto">
+            <input type = "text" id="requirementNameTextBox" class="form-control" placeholder="Требование"/>
+        </div>
+
+        <div class="col-auto">
+            <input type="text" id="distanceTextBox" class="form-control" placeholder="Расстояние" />
+        </div>
+
+        <div class="col-auto">
+            <input type="button" id="btnAddNew" value="Добавить" class="btn btn-primary"/>
+        </div>
+    </div>
+    <p></p>
+
+    <table class="table table-bordered" id="requirementsTable">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Номер</td>
+                <td>Описание</td>
+                <td>Расстояние(м.)</td>
+                <td>Иконка</td>
+                <td>Действия</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Requirements != null && Model.Requirements.Count != 0)
+            {
+                int count = 1;
+                @foreach (var requirement in Model.Requirements)
+                {
+                    <tr>
+                        <td>@requirement.Id</td>
+                        <td>@count</td>
+                        <td>@requirement.Description</td>
+                        <td>@requirement.Distance</td>
+                        <td>Coming soon...</td>
+                        <td>
+                            <button type="button" onclick="Remove(this)" class="btn btn-danger text-white">Удалить</button>
+                        </td>
+                    </tr>
+                    count++;
+                }
+            }
+        </tbody>
+    </table>
+
+
+    <div class="form-group justify-content-between">
+        <button type="button" class="btn btn-secondary close-button" data-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-primary save-button" id="sendButton">Сохранить</button>
+    </div>
+</form>
+
+<script>
+    //Нужна валидация
+    $("#createOrEditRequestForm").on("click", "#btnAddNew", function() 
+    {
+        var requirementName = $("#requirementNameTextBox");
+        var distance = $("#distanceTextBox");
+        var tbody = $("#requirementsTable > TBODY")[0];
+        var rowCount = $('#requirementsTable tr').length;
+       
+        var row = tbody.insertRow(-1);
+        
+        var cell = $(row.insertCell(-1));
+        cell.html(0);
+
+        cell = $(row.insertCell(-1));
+        cell.html(rowCount);
+
+        cell = $(row.insertCell(-1));
+        cell.html(requirementName.val());
+
+        cell = $(row.insertCell(-1));
+        cell.html(distance.val());
+
+        cell = $(row.insertCell(-1));
+        cell.html("coming soon...");
+
+        cell = $(row.insertCell(-1));
+
+        var buttonRemove = $("<input/>");
+        buttonRemove.attr("type", "button");
+        buttonRemove.attr("value", "Удалить");
+        buttonRemove.attr("class", "btn btn-danger text-white");
+        buttonRemove.attr("onclick", "Remove(this);");
+        cell.append(buttonRemove);
+
+        distance.val("");
+        requirementName.val("");
+    });
+
+    //доделать
+    function Remove(button) 
+    {
+        var row = $(button).closest("TR");
+        row.remove();
+
+        $("#requirementsTable TBODY TR").each(function()
+            {
+                var $row = $(this);
+                $row[0] = row[0] - 1;
+            }
+        );
+    }
+
+    function PassFormWithArray(form) 
+    {
+        var requirements = new Array();
+        var formData = new FormData(form);
+        
+        $(form)
+        {
+            $("#requirementsTable TBODY TR").each(function()
+            {
+                var row = $(this);
+                var requirement = {};
+                requirement.id = row.find("TD").eq(0).html();
+                requirement.description = row.find("TD").eq(2).html();
+                requirement.distance = row.find("TD").eq(3).html();
+                requirements.push(requirement);
+            });
+        }
+
+        formData.append("requirements", JSON.stringify(requirements));
+
+        try {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    if (res.isValid) {
+                        $('#viewRequests').html(res.html);
+                        $('#form-modal').modal('hide');
+                    }
+                },
+
+                error: function (err) {
+                    console.log(err);
+                    alert(err + " error");
+                }
+            });
+            return false;
+        } catch (ex) {
+            console.log(ex);
+        }
+    }
+
+</script>
+

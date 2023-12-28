@@ -1,0 +1,77 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Главная";
+}
+<script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
+
+
+<style>
+</style>
+
+<div class="text-center">
+    <h4 class="display-4">Карта электрических станций</h4>
+    <p><a href="https://docs.microsoft.com/aspnet/core">Обучение</a></p>
+</div>
+
+<p></p>
+
+<div class="text-start">
+    <h5 class="display-5">Запросы</h5>
+</div>
+
+<div class="card">
+    <div class="col-sm-12" style="padding:20px">
+        <div id = "updateIcons" class="btn btn-primary">Сохранить иконки в бд</div>
+        <form method="post" asp-page="Index" asp-page-handler="RemoveAllCurrentRequirements" onsubmit="return jQueryModalDelete(this)" class="d-inline">
+            <button type="submit" class="btn btn-danger text-white">Очистить список</button>
+        </form>
+    </div>
+    
+    <div id="viewRequests" class="card-body table-responsive"></div>
+    
+    <p></p>
+    <div class="row">
+        <div class="col-md-8 offset-md-5">
+            <a onclick="jQueryModalGet('?handler=CreateOrEditRequest','Создание запроса')" class="btn btn-primary">Создать новый запрос</a>
+        </div>
+    </div>
+
+    <p></p>
+
+</div>
+
+<p></p>  
+<p></p>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#viewRequests').load('?handler=ViewAllRequests');
+        });
+    </script>
+}
+
+<div class="text-center">
+    <h1 class="display-4">Карта</h1>
+</div>
+<div class = "row">
+    <div class="col-md-8 offset-md-1">
+    <div id="map" style="width:1080px; height:600px"></div>
+
+        <script>
+            DG.then(function () {
+                var map = DG.map('map', {
+                    center: [52.2978, 104.296],
+                    zoom: 15
+                });
+
+                DG.circle([52.284928, 104.304552], 100).addTo(map);
+
+            });
+        </script>
+    </div>
+</div>
+
+
+<p></p>
