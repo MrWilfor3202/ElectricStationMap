@@ -2,19 +2,38 @@ using ElectricStationMap;
 using ElectricStationMap.Repository;
 using ElectricStationMap.Repository.EF;
 using ElectricStationMap.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Razor pages.
-builder.Services.AddRazorPages();
 
 //DB
 builder.Services.AddDbContext<ElectricStationMapDBContext>(options =>
                     options.UseLazyLoadingProxies()
                     .UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException()));
 
+//Identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(
+    options => 
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+    })
+    .AddEntityFrameworkStores<ElectricStationMapDBContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    options.LoginPath = "/Identity/Account/Login";
+    options.LogoutPath = "/Identity/Account/Logout";
+    options.AccessDeniedPath= "/Identity/Account/AccessDenied";
+});
+
+
+//Razor pages.
+builder.Services.AddRazorPages();
 
 //Repositories
 builder.Services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
