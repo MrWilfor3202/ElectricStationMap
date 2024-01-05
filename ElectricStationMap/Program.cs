@@ -2,9 +2,12 @@ using ElectricStationMap;
 using ElectricStationMap.Repository;
 using ElectricStationMap.Repository.EF;
 using ElectricStationMap.Services;
+using ElectricStationMap.Services.Email;
+using MailKitSimplified.Sender;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using ElectricStationMap.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,11 +19,13 @@ builder.Services.AddDbContext<ElectricStationMapDBContext>(options =>
 
 //Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(
-    options => 
+    options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
     })
-    .AddEntityFrameworkStores<ElectricStationMapDBContext>();
+    .AddEntityFrameworkStores<ElectricStationMapDBContext>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -41,12 +46,14 @@ builder.Services.AddTransient<IRequestRepositoryAsync, RequestInfoRepositoryAsyn
 builder.Services.AddTransient<IIconRepositoryAsync, IconRepositoryAsync>();
 builder.Services.AddTransient<IRequirementRepositoryAsync, RequirementRepositoryAsync>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<IEmailSender, MailKitEmailSender>();
 
 
 //Services
 builder.Services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddScoped<IRazorRenderService, RazorRenderService>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddMailKitSimplifiedEmailSender(builder.Configuration);
 
 var app = builder.Build();
 
@@ -62,6 +69,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

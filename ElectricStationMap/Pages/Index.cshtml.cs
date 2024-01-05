@@ -40,6 +40,11 @@ namespace ElectricStationMap.Pages
             _iconRepositoryAsync = iconRepositoryAsync;
         }
 
+        public async Task<IActionResult> OnGetAsync() 
+        {
+            return Page();
+        }
+
         public async Task<PartialViewResult> OnGetViewAllRequests()
         {
             Requests = await _requestRepositoryAsync.GetAllAsync();

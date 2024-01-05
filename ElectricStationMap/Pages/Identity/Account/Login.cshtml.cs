@@ -49,7 +49,7 @@ namespace ElectricStationMap.Pages.Identity.Account
 
         public async void OnGetAsync(string returnUrl = null)
         {
-            if (!string.IsNullOrEmpty(ErrorMessage))
+			if (!string.IsNullOrEmpty(ErrorMessage))
                 ModelState.AddModelError(string.Empty, ErrorMessage);
 
             returnUrl ??= Url.Content("~/");
@@ -70,7 +70,11 @@ namespace ElectricStationMap.Pages.Identity.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in");
-                    return LocalRedirect(returnUrl);
+
+                    if(Url.IsLocalUrl(returnUrl))
+                        return LocalRedirect(returnUrl);
+                    else
+                        return RedirectToPage("/Index");
                 }
 
                 ModelState.AddModelError(String.Empty, "Не удалось войти");

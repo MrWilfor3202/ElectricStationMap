@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 
+
 namespace ElectricStationMap.Pages.Identity.Account
 {
     [AllowAnonymous]
