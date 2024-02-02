@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 
 
-namespace ElectricStationMap.Pages.Identity.Account
+namespace ElectricStationMap.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel
@@ -77,15 +77,13 @@ namespace ElectricStationMap.Pages.Identity.Account
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-                    var callbackUrl = Url.Page("", 
-                        pageHandler: null,
-                        values: new { area = "Identity",
-                                      userId = user.Id,
-                                      code
-                                    },
-                        protocol: Request.Scheme);
+					var callbackUrl = Url.Page(
+				        "/Account/ConfirmEmail",
+				        pageHandler: null,
+				        values: new { area = "Identity", Input.Email, code },
+				        protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email,
+					await _emailSender.SendEmailAsync(Input.Email,
                         "Подтвердите свой электронный адрес",
                         $"Для подтверждения электронного адреса перейдите по ссылке: {HtmlEncoder.Default.Encode(callbackUrl)}");
 

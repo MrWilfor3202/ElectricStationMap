@@ -1,5 +1,5 @@
 ﻿@page
-@model ElectricStationMap.Pages.Identity.Account.LoginModel
+@model ElectricStationMap.Areas.Identity.Pages.Account.LoginModel
 @{
 	ViewData["Title"] = "Вход";
 }
@@ -41,7 +41,7 @@
 				<a href="/Identity/Account/Register?ReturnUrl=@Model.ReturnUrl">Нет учетной записи? Регистрация здесь!</a>
 				<p></p>
 
-				<a href="/Identity/Account/Register?ReturnUrl=@Model.ReturnUrl">Забыли пароль? Перейдите сюда!</a>
+				<a href="/Identity/Account/ResetPassword?ReturnUrl=@Model.ReturnUrl">Забыли пароль? Перейдите сюда!</a>
 				<P></P>
 			</section>
 		</div>

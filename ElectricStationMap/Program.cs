@@ -3,11 +3,11 @@ using ElectricStationMap.Repository;
 using ElectricStationMap.Repository.EF;
 using ElectricStationMap.Services;
 using ElectricStationMap.Services.Email;
+using ElectricStationMap.Services.Guid;
 using MailKitSimplified.Sender;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using ElectricStationMap.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +21,7 @@ builder.Services.AddDbContext<ElectricStationMapDBContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(
     options =>
     {
-        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedAccount = true;
     })
     .AddEntityFrameworkStores<ElectricStationMapDBContext>()
     .AddSignInManager()
@@ -52,6 +52,7 @@ builder.Services.AddTransient<IEmailSender, MailKitEmailSender>();
 //Services
 builder.Services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddScoped<IRazorRenderService, RazorRenderService>();
+builder.Services.AddSingleton<ISequentialGuidGenerator, CustomSequentialGuidGenerator>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMailKitSimplifiedEmailSender(builder.Configuration);
 
