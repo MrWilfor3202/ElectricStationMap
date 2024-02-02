@@ -27,8 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Identity\Pages\Account\Shared\" />
     <Folder Include="Controllers\" />
     <Folder Include="Models\Bindings\" />
+    <Folder Include="Areas\Identity\Pages\Account\Error\" />
   </ItemGroup>
 
 </Project>

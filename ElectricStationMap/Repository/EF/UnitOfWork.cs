@@ -3,7 +3,7 @@
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ElectricStationMapDBContext _dbContext;
-        private bool disposed;
+        private bool _disposed;
 
         public UnitOfWork(ElectricStationMapDBContext dbContext) 
         {
@@ -23,7 +23,7 @@
 
         protected virtual void Dispose(bool disposing) 
         {
-            if (!disposed)
+            if (!_disposed)
             {
                 if (disposing)
                 {
@@ -31,7 +31,7 @@
                 }
             }
 
-            disposed = true;
+            _disposed = true;
         }
     }
 }
