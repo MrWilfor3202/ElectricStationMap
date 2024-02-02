@@ -7,9 +7,11 @@ using ElectricStationMap.Services;
 using ElectricStationMap.Models.EF;
 using Newtonsoft.Json;
 using ElectricStationMap.Models.Ajax;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ElectricStationMap.Pages
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly IRequestRepositoryAsync _requestRepositoryAsync;
@@ -36,6 +38,11 @@ namespace ElectricStationMap.Pages
             _renderService = renderService;
             _requirementRepositoryAsync = requirementRepositoryAsync;
             _iconRepositoryAsync = iconRepositoryAsync;
+        }
+
+        public async Task<IActionResult> OnGetAsync() 
+        {
+            return Page();
         }
 
         public async Task<PartialViewResult> OnGetViewAllRequests()

@@ -1,10 +1,11 @@
 ﻿using ElectricStationMap.Models.EF;
 using ElectricStationMap.Models.EntityFramework;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElectricStationMap
 {
-    public class ElectricStationMapDBContext : DbContext
+    public class ElectricStationMapDBContext : IdentityDbContext
     {
         public ElectricStationMapDBContext(DbContextOptions<ElectricStationMapDBContext> options) : base(options) { }
 
