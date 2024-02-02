@@ -6,6 +6,7 @@ namespace ElectricStationMap.Services.Email
 {
 	public class MailKitEmailSender : IEmailSender
 	{
+		
 		public async Task SendEmailAsync(string email, string title, string message)
 		{
 			var confuguration = new ConfigurationBuilder()
@@ -20,10 +21,9 @@ namespace ElectricStationMap.Services.Email
 
 			await smtpSender.WriteEmail
 				.From("gorbachevAndrey0202@yandex.ru")
-				.Bcc("gorbachevAndrey0202@yandex.ru")
+				.Bcc("admin@example.com")
 				.Subject(title)
 				.BodyHtml($"<p>{message}</p>")
-				.To(email)
 				.SendAsync();
 		}
 	}

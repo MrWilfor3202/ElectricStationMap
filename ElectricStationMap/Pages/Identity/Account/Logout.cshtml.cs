@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ElectricStationMap.Areas.Identity.Pages.Account
+namespace ElectricStationMap.Pages.Identity.Account
 {
     public class LogoutModel : PageModel
     {
@@ -15,15 +15,19 @@ namespace ElectricStationMap.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        public async Task<IActionResult> OnGet(string returnUrl = null) 
+        public void OnGet()
+        {
+        }
+
+        public async Task<IActionResult> OnPost(string returnUrl = null) 
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation($"User {User.Identity.Name} logged out");
+            _logger.LogInformation("User logged out");
 
             if (returnUrl != null)
                 return LocalRedirect(returnUrl);
             else
-                return RedirectToPage("/");
+                return RedirectToPage();
         }
     }
 }

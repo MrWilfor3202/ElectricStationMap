@@ -10,11 +10,6 @@
     <link rel="stylesheet" href="~/ElectricStationMap.styles.css" asp-append-version="true" />
     <link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 </head>
-
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -26,33 +21,13 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                        </li>
                     </ul>
-
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        <div class="collapse navbar-collapse" id="navbarUserName">
-                            <ul class="navbar nav">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarMenuLink"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        @User.Identity.Name
-                                    </a>
-
-                                    <ul class="dropdown-menu dropdown-menu-white" aria-labelledby="navbarMenuLink">
-                                        <li>
-                                            <a class="dropdown-menu-item" asp-area="Identity" asp-page="Account/Logout">Личный кабинет</a>
-                                        </li>
-
-                                        <li>
-                                            <a class="dropdown-menu-item" asp-area="Identity" asp-page="Account/Logout" 
-                                            asp-route-returnUrl="/">Выйти</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    }
                 </div>
             </div>
         </nav>

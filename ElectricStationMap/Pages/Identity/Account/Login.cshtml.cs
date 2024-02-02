@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 
-namespace ElectricStationMap.Areas.Identity.Pages.Account
+namespace ElectricStationMap.Pages.Identity.Account
 {
     public class LoginModel : PageModel
     {
@@ -47,7 +47,7 @@ namespace ElectricStationMap.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }   
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async void OnGetAsync(string returnUrl = null)
         {
 			if (!string.IsNullOrEmpty(ErrorMessage))
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -62,9 +62,8 @@ namespace ElectricStationMap.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null) 
         {
             returnUrl ??= Url.Content("~/");
-			ReturnUrl = returnUrl;
 
-			if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, false);
 
