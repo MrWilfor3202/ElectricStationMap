@@ -11,10 +11,5 @@ namespace ElectricStationMap.Repository.EF
         {
             _requirements = dbContext.Set<RequirementInfo>();
         }
-
-        public Task<bool> HasRequirement(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

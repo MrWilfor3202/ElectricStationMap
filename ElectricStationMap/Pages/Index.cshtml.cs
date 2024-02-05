@@ -8,6 +8,8 @@ using ElectricStationMap.Models.EF;
 using Newtonsoft.Json;
 using ElectricStationMap.Models.Ajax;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using ElectricStationMap.Services.Guid;
 
 namespace ElectricStationMap.Pages
 {
@@ -20,6 +22,7 @@ namespace ElectricStationMap.Pages
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRazorRenderService _renderService;
         private readonly ILogger<IndexModel> _logger;
+        private readonly ISequentialGuidGenerator _sequentialGuidGenerator;
 
         public IEnumerable<RequestInfo> Requests { get; set; }
         
@@ -30,7 +33,8 @@ namespace ElectricStationMap.Pages
 
         public IndexModel(ILogger<IndexModel> logger, 
             IRequestRepositoryAsync requestRepository, IUnitOfWork unitOfWork, IRazorRenderService renderService,
-            IRequirementRepositoryAsync requirementRepositoryAsync, IIconRepositoryAsync iconRepositoryAsync)
+            IRequirementRepositoryAsync requirementRepositoryAsync, IIconRepositoryAsync iconRepositoryAsync,
+            ISequentialGuidGenerator sequentialGuidGenerator)
         {
             _logger = logger;
             _requestRepositoryAsync = requestRepository;
@@ -38,11 +42,7 @@ namespace ElectricStationMap.Pages
             _renderService = renderService;
             _requirementRepositoryAsync = requirementRepositoryAsync;
             _iconRepositoryAsync = iconRepositoryAsync;
-        }
-
-        public async Task<IActionResult> OnGetAsync() 
-        {
-            return Page();
+            _sequentialGuidGenerator = sequentialGuidGenerator;
         }
 
         public async Task<PartialViewResult> OnGetViewAllRequests()
@@ -56,7 +56,7 @@ namespace ElectricStationMap.Pages
             };
         }
 
-        public async Task<JsonResult> OnPostDeleteRequestAsync(int id) 
+        public async Task<JsonResult> OnPostDeleteRequestAsync(Guid id = default) 
         {
             var request = await _requestRepositoryAsync.GetByIdAsync(id);
             await _requestRepositoryAsync.DeleteAsync(request);
@@ -68,9 +68,9 @@ namespace ElectricStationMap.Pages
             return new JsonResult(new { IsValid = true, html = html }); 
         }
 
-        public async Task<JsonResult> OnGetCreateOrEditRequestAsync(int id = 0)
+        public async Task<JsonResult> OnGetCreateOrEditRequestAsync(Guid id = default)
         {
-            if (id == 0)
+            if (id == default)
                 return new JsonResult(new
                 {
                     isValid = true,
@@ -85,7 +85,7 @@ namespace ElectricStationMap.Pages
             }
         }
 
-        public async Task<JsonResult> OnPostCreateOrEditRequestAsync(int id, RequestInfo requestInfo) 
+        public async Task<JsonResult> OnPostCreateOrEditRequestAsync(Guid id = default, RequestInfo requestInfo = null) 
         {
             if (ModelState.IsValid)
             {
@@ -94,8 +94,9 @@ namespace ElectricStationMap.Pages
                     DeserializeObject<List<JSONRequirementsModel>>(getData);
 
                 requestInfo.CreationDateTime = DateTime.Now;
+                requestInfo.UserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                if (id == 0)
+                if (id == default)
                     await _requestRepositoryAsync.AddAsync(requestInfo);
                 else
                     await _requestRepositoryAsync.UpdateAsync(requestInfo);
@@ -106,14 +107,13 @@ namespace ElectricStationMap.Pages
                 {
                     RequirementInfo requirementInfo = new RequirementInfo
                     {
-                        Id = int.Parse(requirement.Id),
                         Description = requirement.Description,
                         Distance = int.Parse(requirement.Distance),
                         RequestInfoId = requestInfo.Id,
-                        IconId = 1
+                        IconId = new Guid("1B7FA8AC-2484-469C-9B54-6CA71B5F0B62")
                     };
 
-                    if (requirementInfo.Id == 0)
+                    if (requirementInfo.Id == default)
                         await _requirementRepositoryAsync.AddAsync(requirementInfo);
                     else
                         await _requirementRepositoryAsync.UpdateAsync(requirementInfo);

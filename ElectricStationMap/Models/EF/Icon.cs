@@ -1,14 +1,13 @@
 ﻿using ElectricStationMap.Models.EntityFramework;
+using ElectricStationMap.Services.Guid;
 
 namespace ElectricStationMap.Models.EF
 {
-    public class Icon
+    public class Icon : BaseEntity
     {
-        public int Id { get; set; }
-
         public string URL { get; set; }
 
-        public virtual List<RequirementInfo> Requirements { get; set; }
+        public virtual ICollection<RequirementInfo> Requirements { get; set; }
 
         public string BuildingType { get; set; } = String.Empty;
     }

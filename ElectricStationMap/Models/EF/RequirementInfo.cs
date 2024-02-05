@@ -1,18 +1,15 @@
 ﻿using ElectricStationMap.Models.EF;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using ElectricStationMap.Services.Guid;
 
 namespace ElectricStationMap.Models.EntityFramework
 {
-    public class RequirementInfo
+    public class RequirementInfo : BaseEntity
     {
-        public int Id { get; set; }
-
         public int Distance { get; set; } 
 
-        public int RequestInfoId { get; set; }
+        public Guid RequestInfoId { get; set; }
 
-        public int IconId { get; set; }
+        public Guid IconId { get; set; }
 
         public string Description { get; set; } = "";
 

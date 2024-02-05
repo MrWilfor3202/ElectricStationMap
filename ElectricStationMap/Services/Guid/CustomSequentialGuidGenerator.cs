@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using System.Linq;
 
 namespace ElectricStationMap.Services.Guid
 {
