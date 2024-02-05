@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElectricStationMap
 {
-    public class ElectricStationMapDBContext : IdentityDbContext
+    public class ElectricStationMapDBContext : IdentityDbContext<ApplicationUser, ApplictionRole, int>
     {
         public ElectricStationMapDBContext(DbContextOptions<ElectricStationMapDBContext> options) : base(options) { }
 

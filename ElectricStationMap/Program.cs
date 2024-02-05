@@ -1,4 +1,5 @@
 using ElectricStationMap;
+using ElectricStationMap.Models.EF;
 using ElectricStationMap.Repository;
 using ElectricStationMap.Repository.EF;
 using ElectricStationMap.Services;
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<ElectricStationMapDBContext>(options =>
                     .UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException()));
 
 //Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(
+builder.Services.AddIdentity<ApplicationUser, ApplictionRole>(
     options =>
     {
         options.SignIn.RequireConfirmedAccount = true;

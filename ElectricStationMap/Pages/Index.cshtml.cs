@@ -8,6 +8,7 @@ using ElectricStationMap.Models.EF;
 using Newtonsoft.Json;
 using ElectricStationMap.Models.Ajax;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace ElectricStationMap.Pages
 {
@@ -94,6 +95,7 @@ namespace ElectricStationMap.Pages
                     DeserializeObject<List<JSONRequirementsModel>>(getData);
 
                 requestInfo.CreationDateTime = DateTime.Now;
+                requestInfo.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
                 if (id == 0)
                     await _requestRepositoryAsync.AddAsync(requestInfo);

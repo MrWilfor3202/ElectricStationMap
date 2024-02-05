@@ -1,3 +1,4 @@
+using ElectricStationMap.Models.EF;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,10 +10,10 @@ namespace ElectricStationMap.Areas.Identity.Pages.Account
     public class ResetPasswordByEmailModel : PageModel
     {
         private readonly ILogger<ResetPasswordByEmailModel> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public ResetPasswordByEmailModel(ILogger<ResetPasswordByEmailModel> logger, 
-            UserManager<IdentityUser> userManager)
+            UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _userManager = userManager;

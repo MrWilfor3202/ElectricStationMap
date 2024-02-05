@@ -1,3 +1,4 @@
+using ElectricStationMap.Models.EF;
 using ElectricStationMap.Services.Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,10 +12,10 @@ namespace ElectricStationMap.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public RegisterConfirmationModel(UserManager<IdentityUser> userManager,
+        public RegisterConfirmationModel(UserManager<ApplicationUser> userManager,
             IEmailSender emailSender) 
         {
             _emailSender = emailSender;
