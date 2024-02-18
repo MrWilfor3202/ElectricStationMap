@@ -24,7 +24,7 @@ namespace ElectricStationMap.Areas.Identity.Pages.Account
             if (returnUrl != null)
                 return LocalRedirect(returnUrl);
             else
-                return RedirectToPage("/");
+                return RedirectToPage("/Index");
         }
     }
 }

@@ -66,9 +66,10 @@ namespace ElectricStationMap.Areas.Identity.Pages.Account
 			ReturnUrl = returnUrl;
 
 			if (ModelState.IsValid)
-            {
+            { 
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, false);
-
+				var user = await _userManager.FindByEmailAsync(Input.Email);
+				
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in");
@@ -77,6 +78,15 @@ namespace ElectricStationMap.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     else
                         return RedirectToPage("/Index");
+                }
+
+                if(result.RequiresTwoFactor)
+                    return RedirectToPage("./TwoFactorAuthentication", new { rememberMe = false, returnUrl});
+
+                if (result.IsLockedOut)
+                {
+                    _logger.LogWarning("User account locked out.");
+                    return RedirectToPage("./Lockout", new { id = user.Id });
                 }
 
                 ModelState.AddModelError(String.Empty, "Не удалось войти");
