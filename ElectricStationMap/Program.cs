@@ -18,6 +18,10 @@ builder.Services.AddDbContext<ElectricStationMapDBContext>(options =>
                     options.UseLazyLoadingProxies()
                     .UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException()));
 
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ElectricStationMapDBContext>();
+
+/*
 //Identity
 builder.Services.AddIdentity<ApplicationUser, ApplictionRole>(
     options =>
@@ -36,6 +40,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/Identity/Account/Logout";
     options.AccessDeniedPath= "/Identity/Account/AccessDenied";
 });
+
+*/
 
 
 //Razor pages.
